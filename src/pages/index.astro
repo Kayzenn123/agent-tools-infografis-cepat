@@ -17,15 +17,15 @@ const faqItems = FAQS.map((f) => ({ title: f.q, description: f.a }));
 <Layout metadata={metadata}>
   <a
     href="#konten"
-    class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-[var(--pop)] focus:px-4 focus:py-2 focus:text-[var(--ink)]"
+    style="min-width:44px;min-height:44px" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-[var(--pop)] focus:px-4 focus:py-2 focus:text-[var(--ink)]"
   >
     Lompat ke konten
   </a>
 
   <!-- ============ HEADER ============ -->
   <header class="sticky top-0 z-50 border-b-[3px] border-[var(--ink)] bg-[var(--bg)]">
-    <div class="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3">
-      <a href="#top" class="flex items-center gap-3" aria-label="InfografisCepat — kembali ke atas">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
+      <a href="#top" class="flex min-h-[44px] items-center gap-3" aria-label="InfografisCepat — kembali ke atas">
         <svg width="34" height="34" viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">
           <rect width="16" height="16" fill="#2b2bd9"></rect>
           <rect x="1" y="1" width="14" height="14" fill="#e8a04c"></rect>
@@ -49,13 +49,13 @@ const faqItems = FAQS.map((f) => ({ title: f.q, description: f.a }));
           id="motion-toggle"
           type="button"
           aria-pressed="true"
-          class="border-2 border-[var(--ink)] bg-[var(--cream)] px-3 py-2 text-[1rem] leading-none transition-transform duration-150 hover:-translate-y-0.5 active:translate-y-0"
+          class="inline-flex min-h-[44px] items-center border-2 border-[var(--ink)] bg-[var(--cream)] px-3 py-2 text-[1rem] leading-none transition-transform duration-150 hover:-translate-y-0.5 active:translate-y-0"
         >
           Gerak: <span id="motion-state">Nyala</span>
         </button>
         <a
           href="#racik"
-          class="border-2 border-[var(--ink)] bg-[var(--blue)] px-4 py-2 text-[1rem] font-bold leading-none text-[var(--ink)] shadow-[4px_4px_0_var(--ink)] transition-transform duration-150 hover:-translate-y-0.5 active:translate-y-0 active:shadow-none"
+          class="inline-flex min-h-[44px] items-center border-2 border-[var(--ink)] bg-[var(--blue)] px-4 py-2 text-[1rem] font-bold leading-none text-[var(--ink)] shadow-[4px_4px_0_var(--ink)] transition-transform duration-150 hover:-translate-y-0.5 active:translate-y-0 active:shadow-none"
         >
           Mulai Meracik
         </a>
@@ -345,7 +345,7 @@ const faqItems = FAQS.map((f) => ({ title: f.q, description: f.a }));
           {SYARAT.map((s) => (
             <li>
               <label class="syarat-card flex cursor-pointer gap-4 border-[3px] border-[var(--ink)] bg-[var(--bg)] p-5 transition-transform duration-150 hover:-translate-y-1">
-                <input type="checkbox" data-syarat={s.id} class="mt-1 h-6 w-6 shrink-0 accent-[#2b2bd9]" />
+                <input type="checkbox" data-syarat={s.id} class="h-11 w-11 shrink-0 accent-[#2b2bd9]" />
                 <span>
                   <span class="block font-bold">{s.nama}</span>
                   <span class="mt-1 block">{s.detail}</span>
@@ -429,7 +429,7 @@ const faqItems = FAQS.map((f) => ({ title: f.q, description: f.a }));
     <p>Kembalian receh, naskah mewah. &mdash; Mas Dapur</p>
   </div>
 
-  <style>
+  <style is:global>
     /* Keputusan berani: hanya dua ukuran — 1rem dan raksasa */
     .section-title {
       font-family: var(--font-display);
@@ -441,6 +441,11 @@ const faqItems = FAQS.map((f) => ({ title: f.q, description: f.a }));
       font-size: clamp(3.5rem, 16vw, 15rem);
     }
     .navlink, .footerlink {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      min-width: 44px;
       font-size: 1rem;
       font-weight: 600;
       text-decoration: underline;
@@ -452,6 +457,7 @@ const faqItems = FAQS.map((f) => ({ title: f.q, description: f.a }));
       display: inline-block;
       border: 2px solid var(--ink);
       background: var(--cream);
+      color: var(--ink);
       padding: 0.25rem 0.75rem;
       font-family: var(--font-accent);
       font-size: 1rem;
@@ -495,6 +501,9 @@ const faqItems = FAQS.map((f) => ({ title: f.q, description: f.a }));
     }
     .marquee-track.skewing { animation-duration: 8s; }
 
+    /* fieldset butuh min-width:0 agar strip tidak melebar (bug klasik) */
+    #racik-form fieldset { min-width: 0; }
+
     /* Flick strip D */
     .flick-strip {
       cursor: grab;
@@ -502,7 +511,7 @@ const faqItems = FAQS.map((f) => ({ title: f.q, description: f.a }));
       touch-action: pan-y;
     }
     .flick-strip.dragging { cursor: grabbing; }
-    .flick-strip.dragging .preset-card { pointer-events: none; }
+    .flick-strip.dragging .preset-card { user-select: none; }
     .preset-card[aria-selected="true"] {
       background: var(--pop);
       transform: translateY(-4px);

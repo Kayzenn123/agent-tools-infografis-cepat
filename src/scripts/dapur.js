@@ -1,10 +1,19 @@
 // InfografisCepat — "dapur" client-side.
 // Modul: state+storage, deep-link, generator, checklist, ekspor, gerak (GSAP).
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PRESETS, SYARAT, BLOK_LABEL } from '../data/presets.js';
 
-gsap.registerPlugin(ScrollTrigger);
+/* GSAP hanya diunduh kalau motion benar-benar jalan (hemat ~82KB di HP/lite) */
+let gsap = null, ScrollTrigger = null;
+async function ensureGsap() {
+  if (gsap) return true;
+  try {
+    const [g, st] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger')]);
+    gsap = g.gsap || g.default || g;
+    ScrollTrigger = st.ScrollTrigger;
+    gsap.registerPlugin(ScrollTrigger);
+    return true;
+  } catch { return false; }
+}
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -18,7 +27,7 @@ const liteDevice =
   (navigator.deviceMemory || 8) <= 4 ||
   !!navigator.connection?.saveData;
 let motionOn = !reducedOS && !liteDevice;
-if (reducedOS) document.documentElement.dataset.motion = 'off';
+if (!motionOn) document.documentElement.dataset.motion = 'off';
 
 /* ---------- state ---------- */
 const KEY = 'infografis-cepat/v1';
@@ -136,7 +145,7 @@ function racik(ev) {
 
 /* C: kata/blok jatuh lalu menumpuk — dipakai ulang tiap Racik */
 function jatuhKePiring() {
-  if (!motionOn) return;
+  if (!motionOn || !gsap) return;
   gsap.fromTo('.station',
     { y: -34, opacity: 0 },
     { y: 0, opacity: 1, duration: 0.45, stagger: 0.07, ease: 'back.out(1.6)', overwrite: true,
@@ -170,9 +179,9 @@ function initStrip() {
     down = true; moved = 0; stop();
     startX = lastX = e.clientX; startL = strip.scrollLeft; vel = 0;
     strip.classList.add('dragging');
-    strip.setPointerCapture(e.pointerId);
   });
-  strip.addEventListener('pointermove', (e) => {
+  // pointermove/up di window (tanpa setPointerCapture) agar klik kartu tetap sampai
+  window.addEventListener('pointermove', (e) => {
     if (!down) return;
     const dx = e.clientX - lastX;
     moved += Math.abs(e.clientX - startX);
@@ -185,8 +194,8 @@ function initStrip() {
     strip.classList.remove('dragging');
     if (motionOn && Math.abs(vel) > 1) { raf = requestAnimationFrame(decay); }
   };
-  strip.addEventListener('pointerup', up);
-  strip.addEventListener('pointercancel', up);
+  window.addEventListener('pointerup', up);
+  window.addEventListener('pointercancel', up);
   // cegah klik nyasar setelah flick
   strip.addEventListener('click', (e) => { if (moved > 10) { e.stopPropagation(); e.preventDefault(); } }, true);
 }
@@ -293,8 +302,9 @@ function initInputs() {
 
 /* ---------- gerak (A–E) ---------- */
 let triggers = [];
-function initMotion() {
+async function initMotion() {
   if (!motionOn) return;
+  if (!(await ensureGsap())) return;
 
   // C: hero — kata jatuh lalu menumpuk
   gsap.fromTo('.hero-word',
@@ -361,6 +371,7 @@ function initMotion() {
   $$('.station').forEach((s) => io.observe(s));
 }
 function killMotion() {
+  if (!gsap) return;
   triggers.forEach((t) => t.kill());
   triggers = [];
   gsap.set(['#hero-inner', '.hero-word', '.station', '.marquee-track'], { clearProps: 'all' });

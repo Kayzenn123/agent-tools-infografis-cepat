@@ -1,0 +1,68 @@
+site:
+  name: InfografisCepat
+  site: 'https://kayzenn123.github.io'
+  base: '/agent-tools-infografis-cepat'
+  trailingSlash: false
+
+# Default SEO metadata
+metadata:
+  title:
+    default: InfografisCepat — Dapur Naskah Lomba Infografis
+    template: '%s — InfografisCepat'
+  description: 'Racik draf 6 blok naskah infografis dari 12 tema siap pakai, checklist syarat administratif lomba, dan panduan tipografi juri. Gratis, tanpa akun, jalan di browser.'
+  robots:
+    index: true
+    follow: true
+  openGraph:
+    site_name: InfografisCepat
+    images:
+      - url: '~/assets/images/og-infografis-cepat.png'
+        width: 1200
+        height: 630
+    type: website
+  twitter:
+    cardType: summary_large_image
+
+i18n:
+  language: id
+  textDirection: ltr
+
+apps:
+  blog:
+    isEnabled: false
+    postsPerPage: 8
+
+    post:
+      isEnabled: false
+      permalink: '/%slug%'
+      robots:
+        index: false
+
+    list:
+      isEnabled: false
+      pathname: 'blog'
+      robots:
+        index: false
+
+    category:
+      isEnabled: false
+      pathname: 'category'
+      robots:
+        index: false
+
+    tag:
+      isEnabled: false
+      pathname: 'tag'
+      robots:
+        index: false
+
+    isRelatedPostsEnabled: false
+    relatedPostsCount: 0
+
+analytics:
+  vendors:
+    googleAnalytics:
+      id: null # or "G-XXXXXXXXXX"
+
+ui:
+  theme: 'light:only' # Dapur warteg: satu tema, tidak ada dark mode

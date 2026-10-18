@@ -36,11 +36,13 @@ npm run preview
 - `src/data/presets.js` — 12 preset tema × 6 blok, 8 syarat, 3 aturan tipografi, 5 FAQ
 - `src/pages/api/health.ts` — endpoint kesehatan (static prerender)
 
-## Skor
+## Skor (terverifikasi 2026-10-18, Playwright + Lighthouse)
 
-- Lighthouse mobile: _diisi setelah deploy_
-- Lighthouse desktop: _diisi setelah deploy_
-- FPS (CPU throttle 4×): _diisi setelah QA_
+- Lighthouse mobile: Performance 91, Accessibility 100
+- Lighthouse desktop: Performance 99, Accessibility 97
+- FPS (CPU throttle 4×): 60.4
+- QA viewports 360/390/768/1280: 0 overflow, 0 tap target <44px, 0 console error
+- Kontras: semua pasangan teks/latar ≥ 4.5 (terukur di browser; satu-satunya gagal — sticker-pop — diperbaiki)
 
 ## Lisensi
 
